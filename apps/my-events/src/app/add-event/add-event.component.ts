@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { EventsService } from '../events.service';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Store } from '@ngxs/store';
+import { AddEvent } from '../state/events.actions';
 
 @Component({
   selector: 'angular-nestJS-add-event',
@@ -14,18 +16,23 @@ export class AddEventComponent implements OnInit {
     eventVenue: new FormControl()
   });
 
-  constructor(public eventService: EventsService) {}
+  constructor(private store: Store) {}
 
   ngOnInit() {}
 
   onSubmit() {
     const myEvent = this.eventItem.value;
-    this.eventService
-      .addEvent({
-        title: myEvent.eventTitle,
-        date: myEvent.eventDate,
-        venue: myEvent.eventVenue
-      })
-      .subscribe();
+
+    this.store
+      .dispatch(
+        new AddEvent({
+          title: myEvent.eventTitle,
+          date: myEvent.eventDate,
+          venue: myEvent.eventVenue
+        })
+      )
+      .subscribe(() => {
+        this.eventItem.reset({ eventTitle: '', eventDate: '', eventVenue: '' });
+      });
   }
 }

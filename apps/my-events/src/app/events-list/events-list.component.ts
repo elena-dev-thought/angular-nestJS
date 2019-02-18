@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { EventsService } from '../events.service';
+import { Store, Select } from '@ngxs/store';
 import { MyEvent } from '@angular-nestJS/shared';
 import { Observable } from 'rxjs';
+import { LoadEvents } from '../state/events.actions';
+import { EventsState } from '../state/events.state';
 
 @Component({
   selector: 'angular-nestJS-events-list',
@@ -9,14 +11,11 @@ import { Observable } from 'rxjs';
   styleUrls: ['./events-list.component.scss']
 })
 export class EventsListComponent implements OnInit {
-  events: Observable<MyEvent[]>;
-  constructor(public eventsService: EventsService) {}
+  @Select(EventsState.getEvents) events$: Observable<MyEvent[]>;
+
+  constructor(private store: Store) {}
 
   ngOnInit() {
-    this.retrieveEvents();
-  }
-
-  retrieveEvents() {
-   this.events =  this.eventsService.getEvents();
+    this.store.dispatch(new LoadEvents());
   }
 }

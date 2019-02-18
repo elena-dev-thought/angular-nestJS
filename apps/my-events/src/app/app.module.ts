@@ -9,6 +9,8 @@ import { EventsListComponent } from './events-list/events-list.component';
 import { AddEventComponent } from './add-event/add-event.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgxsModule } from '@ngxs/store';
+import { EventsState } from './state/events.state';
 
 @NgModule({
   declarations: [
@@ -21,8 +23,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     BrowserModule,
     HttpClientModule,
     ReactiveFormsModule,
-    NxModule.forRoot(),
-    RouterModule.forRoot([], { initialNavigation: 'enabled' })
+    RouterModule.forRoot([], { initialNavigation: 'enabled' }),
+    NgxsModule.forRoot([EventsState])
   ],
   providers: [],
   bootstrap: [AppComponent]
